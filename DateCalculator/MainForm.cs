@@ -23,12 +23,12 @@ namespace DateCalculator
             dBAccess.CreateTable();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
             DateTime startDate = startDatePicker.Value;
             DateTime endDate = endDatePicker.Value;
 
-            int days = endDate.Subtract(startDate).Days;
+            int days = endDate.Subtract(startDate).Days + 1;
 
             int businessDays = 1 + (days * 5 - (startDate.DayOfWeek - endDate.DayOfWeek) * 2) / 7;
             if (endDate.DayOfWeek == DayOfWeek.Saturday)
@@ -45,18 +45,18 @@ namespace DateCalculator
             List<Holiday> holidays = dBAccess.getHolidaysCount(Holiday);
             List<Holiday> paidHolidays = dBAccess.getHolidaysCount(PaidHoliday);
 
-            foreach(Holiday holiday in holidays)
+            for(int i = holidays.Count - 1; i >= 0; i--)
             {
-                if (startDate <= holiday.date && holiday.date <= endDate)
+                if (!IsWorkDay(holidays[i].date, startDate, endDate))
                 {
-                    holidays.Remove(holiday);
+                    holidays.RemoveAt(i);
                 }
             }
-            foreach (Holiday holiday in paidHolidays)
+            for (int i = paidHolidays.Count - 1; i >= 0; i--)
             {
-                if (startDate <= holiday.date && holiday.date <= endDate)
+                if (!IsWorkDay(paidHolidays[i].date, startDate, endDate))
                 {
-                    paidHolidays.Remove(holiday);
+                    paidHolidays.RemoveAt(i);
                 }
             }
 
@@ -74,9 +74,22 @@ namespace DateCalculator
             new HolidaySetting().ShowDialog();
         }
 
-        private void 修了ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void 終了ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        /// <summary>
+        /// 与えられた日が、与えられた期間内の平日かどうかを判定する。
+        /// 期間の両端は期間内に含む。
+        /// </summary>
+        /// <param name="target">判定したい日</param>
+        /// <param name="startDate">期間の開始日</param>
+        /// <param name="endDate">期間の終了日</param>
+        /// <returns>判定したい日が期間内の平日であればTrue</returns>
+        private bool IsWorkDay(DateTime target, DateTime startDate, DateTime endDate)
+        {
+            return (startDate <= target && target <= endDate && target.DayOfWeek != DayOfWeek.Saturday && target.DayOfWeek != DayOfWeek.Sunday);
         }
     }
 }
