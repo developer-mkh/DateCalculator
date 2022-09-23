@@ -25,9 +25,9 @@ namespace DateCalculator
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            DateTime startDate = startDatePicker.Value;
-            DateTime endDate = endDatePicker.Value;
-
+            DateTime startDate = startDatePicker.Value.Date;
+            DateTime endDate = endDatePicker.Value.Date;
+ 
             int days = endDate.Subtract(startDate).Days + 1;
 
             int businessDays = 1 + (days * 5 - (startDate.DayOfWeek - endDate.DayOfWeek) * 2) / 7;
