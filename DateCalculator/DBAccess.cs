@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
+using System.Globalization;
 using System.Linq;
 using DateCalculator.dto;
 
@@ -63,12 +64,14 @@ namespace DateCalculator.db
             var sql = string.Format("SELECT date, category FROM holidays WHERE category = {0}", category);
             List<Object[]> holidays = ExecuteReader(sql);
             List<Holiday> ret = new List<Holiday>();
+            CultureInfo provider = CultureInfo.InvariantCulture;
+
             foreach (var item in holidays)
             {
                 Holiday dto = new Holiday();
                 try
                 {
-                    dto.date = DateTime.Parse(item[0].ToString());
+                    dto.date = DateTime.ParseExact(item[0].ToString(), "yyyyMMdd", provider);
                 }
                 catch (Exception)
                 {
