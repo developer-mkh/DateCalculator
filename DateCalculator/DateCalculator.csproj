@@ -53,10 +53,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>145D932021325AE0F08BF6C9466FB225345E0AD2</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>2F05AB3B8A44F3BB6DBBF9EEAE0051DE52CBF7DC</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>DateCalculator_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>DateCalculator_1_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -112,6 +112,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="DateCalculator_1_TemporaryKey.pfx" />
     <None Include="DateCalculator_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

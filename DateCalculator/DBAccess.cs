@@ -33,11 +33,10 @@ namespace DateCalculator.db
         }
 
         /// <summary>
-        /// DataTableを使ったデータの取得
+        /// DataTableを使った休日データの取得
         /// </summary>
-        /// <param name="connectString"></param>
         /// <returns></returns>
-        public DataTable GetData()
+        public DataTable GetHolidayData()
         {
             DataTable dt = new DataTable();
 
@@ -47,7 +46,33 @@ namespace DateCalculator.db
 
                 using (SQLiteCommand cmd = connection.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT holidays.id, holidays.name, holidays.date, holidays.category, categories.name FROM holidays INNER JOIN categories ON holidays.category =  categories.value";
+                    cmd.CommandText = "SELECT holidays.id, holidays.name, holidays.date, holidays.category FROM holidays";
+
+                    // DataAdapterの生成
+                    SQLiteDataAdapter da = new SQLiteDataAdapter(cmd);
+
+                    // データベースからデータを取得
+                    da.Fill(dt);
+                }
+            }
+            return dt;
+        }
+
+        /// <summary>
+        /// DataTableを使ったカテゴリーデータの取得
+        /// </summary>
+        /// <returns></returns>
+        public DataTable GetCategoryData()
+        {
+            DataTable dt = new DataTable();
+
+            using (SQLiteConnection connection = new SQLiteConnection(ConnectString))
+            {
+                connection.Open();
+
+                using (SQLiteCommand cmd = connection.CreateCommand())
+                {
+                    cmd.CommandText = "SELECT categories.id, categories.name, categories.value FROM categories";
 
                     // DataAdapterの生成
                     SQLiteDataAdapter da = new SQLiteDataAdapter(cmd);

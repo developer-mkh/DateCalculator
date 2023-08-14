@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SQLite;
 using DateCalculator.db;
+using System.Linq.Expressions;
 
 namespace DateCalculator
 {
@@ -19,14 +20,21 @@ namespace DateCalculator
             InitializeComponent();
 
             DBAccess dBAccess = new DBAccess();
-            dataGridView.DataSource = dBAccess.GetData();
+            dataGridView.DataSource = dBAccess.GetHolidayData();
 
             dataGridView.Columns["id"].Visible = false;
             dataGridView.Columns["date"].HeaderText = "年月日";
             dataGridView.Columns["name"].HeaderText = "休日名";
-            dataGridView.Columns["category"].HeaderText = "カテゴリー値";
-            dataGridView.Columns["name1"].HeaderText = "カテゴリー名称";
-            dataGridView.Columns["name1"].ReadOnly = true;
+            dataGridView.Columns["category"].Visible = false;
+
+            // カテゴリー部分はコンボボックスで表示する
+            DataGridViewComboBoxColumn column = new DataGridViewComboBoxColumn();
+            column.DataPropertyName = dataGridView.Columns["category"].DataPropertyName;
+            column.DataSource = dBAccess.GetCategoryData();
+            column.ValueMember = "value";
+            column.DisplayMember = "name";
+            column.HeaderText = "カテゴリー";
+            dataGridView.Columns.Add(column);
         }
         private void ok_Click(object sender, EventArgs e)
         {
