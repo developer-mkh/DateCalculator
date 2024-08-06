@@ -42,8 +42,8 @@ namespace DateCalculator
 
             DBAccess dBAccess = new DBAccess();
 
-            List<Holiday> holidays = dBAccess.getHolidaysCount(Holiday);
-            List<Holiday> paidHolidays = dBAccess.getHolidaysCount(PaidHoliday);
+            List<Holiday> holidays = dBAccess.GetHolidays(Holiday);
+            List<Holiday> paidHolidays = dBAccess.GetHolidays(PaidHoliday);
 
             for(int i = holidays.Count - 1; i >= 0; i--)
             {
