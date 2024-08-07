@@ -4,13 +4,21 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 
 namespace DateCalculator.db
 {
     public class DBAccess
     {
-        public string ConnectString { get; set; } = @"Data Source = holidays.db";
+        private readonly string BASE_PATH = System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DateCalculator";
+        public string ConnectString { get; set; }
+
+        public DBAccess()
+        {
+            Directory.CreateDirectory(BASE_PATH);
+            ConnectString = "Data Source =" + BASE_PATH + @"\dateCalculator.db";
+        }
 
         public void CreateTable()
         {
