@@ -1,5 +1,5 @@
 ﻿using DateCalculator.db;
-using DateCalculator.dto;
+using DateCalculator.entity;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -8,8 +8,14 @@ namespace DateCalculator
 {
     public partial class MainForm : Form
     {
-        private int Holiday = 1;
-        private int PaidHoliday = 2;
+        /// <summary>
+        /// 休日カテゴリ：祝祭日
+        /// </summary>
+        private const int HOLIDAY = 1;
+        /// <summary>
+        /// 休日カテゴリ：その他休日
+        /// </summary>
+        private const int PAID_HOLIDAY = 2;
 
         public MainForm()
         {
@@ -27,7 +33,7 @@ namespace DateCalculator
         {
             DateTime startDate = startDatePicker.Value.Date;
             DateTime endDate = endDatePicker.Value.Date;
- 
+
             int days = endDate.Subtract(startDate).Days + 1;
 
             int businessDays = 1 + (days * 5 - (startDate.DayOfWeek - endDate.DayOfWeek) * 2) / 7;
@@ -42,10 +48,10 @@ namespace DateCalculator
 
             DBAccess dBAccess = new DBAccess();
 
-            List<Holiday> holidays = dBAccess.GetHolidays(Holiday);
-            List<Holiday> paidHolidays = dBAccess.GetHolidays(PaidHoliday);
+            List<Holiday> holidays = dBAccess.GetHolidays(HOLIDAY);
+            List<Holiday> paidHolidays = dBAccess.GetHolidays(PAID_HOLIDAY);
 
-            for(int i = holidays.Count - 1; i >= 0; i--)
+            for (int i = holidays.Count - 1; i >= 0; i--)
             {
                 if (!IsWorkDay(holidays[i].date, startDate, endDate))
                 {
@@ -64,7 +70,7 @@ namespace DateCalculator
             int businessDaysWithPaidHolidays = businessDaysWithHolidays - paidHolidays.Count;
 
             daysText.Text = days.ToString();
-            businessDaysText.Text = businessDays.ToString();     
+            businessDaysText.Text = businessDays.ToString();
             businessDayWithHolidayText.Text = businessDaysWithHolidays.ToString();
             businessDayWithPaidHolidayText.Text = businessDaysWithPaidHolidays.ToString();
         }

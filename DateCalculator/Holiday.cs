@@ -1,12 +1,30 @@
 ﻿using System;
 
-namespace DateCalculator.dto
+namespace DateCalculator.entity
 {
+    /// <summary>
+    /// Holidayテーブルに対するエンティティクラス
+    /// </summary>
     public class Holiday
-	{
-		public DateTime date { get; set; }
-		public string category { get; set; }
-		public string name { get; set; }
-		public int id { get; set; }
-	}
+    {
+        /// <summary>
+        /// 休日
+        /// </summary>
+        public DateTime date { get; set; }
+        
+        /// <summary>
+        /// カテゴリー
+        /// </summary>
+        public string category { get; set; }
+        
+        /// <summary>
+        /// 名称
+        /// </summary>
+        public string name { get; set; }
+        
+        /// <summary>
+        /// ID
+        /// </summary>
+        public int id { get; set; }
+    }
 }

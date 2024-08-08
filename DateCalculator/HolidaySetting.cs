@@ -1,5 +1,5 @@
 ﻿using DateCalculator.db;
-using DateCalculator.dto;
+using DateCalculator.entity;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -44,7 +44,8 @@ namespace DateCalculator
 
             List<Holiday> holidays = new List<Holiday>();
             DataGridViewSelectedRowCollection selectedRows = dataGridView.SelectedRows;
-            foreach (DataGridViewRow row in selectedRows) {
+            foreach (DataGridViewRow row in selectedRows)
+            {
                 DataGridViewCellCollection cells = row.Cells;
                 Holiday holiday = new Holiday();
                 holiday.name = cells["name"].Value.ToString();

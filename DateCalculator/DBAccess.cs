@@ -1,4 +1,4 @@
-﻿using DateCalculator.dto;
+﻿using DateCalculator.entity;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -9,17 +9,35 @@ using System.Linq;
 
 namespace DateCalculator.db
 {
+    /// <summary>
+    /// DAOクラス
+    /// </summary>
     public class DBAccess
     {
+        /// <summary>
+        /// DB格納先ディレクトリ
+        /// </summary>
         private readonly string BASE_PATH = System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DateCalculator";
+        
+        /// <summary>
+        /// 接続文字列
+        /// </summary>
         public string ConnectString { get; set; }
 
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
         public DBAccess()
         {
+            // DB格納先ディレクトリがなければ作る
             Directory.CreateDirectory(BASE_PATH);
+
             ConnectString = "Data Source =" + BASE_PATH + @"\dateCalculator.db";
         }
 
+        /// <summary>
+        /// DB初期化処理：テーブル作成
+        /// </summary>
         public void CreateTable()
         {
             string[] sqls = new string[2];
@@ -29,6 +47,10 @@ namespace DateCalculator.db
             initializeData(ConnectString);
         }
 
+        /// <summary>
+        /// DB初期化処理：データ投入
+        /// </summary>
+        /// <param name="connectionString">接続文字列</param>
         private void initializeData(string connectionString)
         {
             if(int.Parse(ExecuteScalar("SELECT count(*) FROM categories").ToString()) == 0)
