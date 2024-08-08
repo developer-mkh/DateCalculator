@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ソリューション項目
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{F112B161-D466-4FD6-A1F5-7006A80539F7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DateCalculator.Test", "DateCalculator.Test\DateCalculator.Test.csproj", "{12B9186B-E22C-445B-A84E-C509BC096AD1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{CD0C3CD3-C884-4A37-993C-A4578663250F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F112B161-D466-4FD6-A1F5-7006A80539F7}.Debug|Any CPU.ActiveCfg = Debug
 		{F112B161-D466-4FD6-A1F5-7006A80539F7}.Release|Any CPU.ActiveCfg = Release
+		{12B9186B-E22C-445B-A84E-C509BC096AD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12B9186B-E22C-445B-A84E-C509BC096AD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12B9186B-E22C-445B-A84E-C509BC096AD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12B9186B-E22C-445B-A84E-C509BC096AD1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
