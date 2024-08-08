@@ -1,17 +1,43 @@
-﻿using System;
+﻿using DateCalculator.entity;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.Globalization;
+using System.IO;
 using System.Linq;
-using DateCalculator.dto;
 
 namespace DateCalculator.db
 {
+    /// <summary>
+    /// DAOクラス
+    /// </summary>
     public class DBAccess
     {
-        public string ConnectString { get; set; } = @"Data Source = holidays.db";
+        /// <summary>
+        /// DB格納先ディレクトリ
+        /// </summary>
+        private readonly string BASE_PATH = System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DateCalculator";
+        
+        /// <summary>
+        /// 接続文字列
+        /// </summary>
+        public string ConnectString { get; set; }
 
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        public DBAccess()
+        {
+            // DB格納先ディレクトリがなければ作る
+            Directory.CreateDirectory(BASE_PATH);
+
+            ConnectString = "Data Source =" + BASE_PATH + @"\dateCalculator.db";
+        }
+
+        /// <summary>
+        /// DB初期化処理：テーブル作成
+        /// </summary>
         public void CreateTable()
         {
             string[] sqls = new string[2];
@@ -21,6 +47,10 @@ namespace DateCalculator.db
             initializeData(ConnectString);
         }
 
+        /// <summary>
+        /// DB初期化処理：データ投入
+        /// </summary>
+        /// <param name="connectionString">接続文字列</param>
         private void initializeData(string connectionString)
         {
             if(int.Parse(ExecuteScalar("SELECT count(*) FROM categories").ToString()) == 0)
@@ -35,8 +65,8 @@ namespace DateCalculator.db
         /// <summary>
         /// DataTableを使った休日データの取得
         /// </summary>
-        /// <returns></returns>
-        public DataTable GetHolidayData()
+        /// <returns>登録されているすべての休日データ</returns>
+        public DataTable GetHolidays()
         {
             DataTable dt = new DataTable();
 
@@ -61,8 +91,8 @@ namespace DateCalculator.db
         /// <summary>
         /// DataTableを使ったカテゴリーデータの取得
         /// </summary>
-        /// <returns></returns>
-        public DataTable GetCategoryData()
+        /// <returns>登録されているすべてのカテゴリーデータ</returns>
+        public DataTable GetCategories()
         {
             DataTable dt = new DataTable();
 
@@ -84,7 +114,12 @@ namespace DateCalculator.db
             return dt;
         }
 
-        public List<Holiday> getHolidaysCount(int category)
+        /// <summary>
+        /// カテゴリーを指定した休日一覧の取得
+        /// </summary>
+        /// <param name="category">カテゴリー</param>
+        /// <returns>登録されており、指定したカテゴリーに一致するすべての休日データ</returns>
+        public List<Holiday> GetHolidays(int category)
         {
             var sql = string.Format("SELECT date, category FROM holidays WHERE category = {0}", category);
             List<Object[]> holidays = ExecuteReader(sql);
@@ -108,13 +143,40 @@ namespace DateCalculator.db
             return ret;
         }
 
+        /// <summary>
+        /// 休日の追加
+        /// </summary>
+        /// <param name="targets">追加する休日情報</param>
+        public void AddHolidays(List<Holiday> targets)
+        {
+            List<String> sqls = new List<String>();
+            foreach (var item in targets)
+            {
+                sqls.Add(string.Format("INSERT INTO holidays (name, date, category) VALUES(\'{0}\', {1}, {2})", item.name, item.date.ToString("yyyyMMdd"), item.category));
+            }
+            ExecuteNoneQuery(sqls.ToArray());
+        }
+
+        /// <summary>
+        /// 休日の削除
+        /// </summary>
+        /// <param name="targets">削除する休日情報（idのみ設定されていれば良い）</param>
+        public void DeleteHolidays(List<Holiday> targets)
+        {
+            List<String> sqls = new List<String>();
+            foreach (var item in targets)
+            {
+                sqls.Add(string.Format("DELETE FROM holidays WHERE id = {0}", item.id));
+            }
+            ExecuteNoneQuery(sqls.ToArray());
+        }
+
 
         /// <summary>
         /// DataTableの内容をデータベースに保存
         /// </summary>
-        /// <param name="connectString"></param>
-        /// <param name="dt"></param>
-        /// <returns></returns>
+        /// <param name="dt">データベースに保存したいDataTable</param>
+        /// <returns>DataTable</returns>
         public DataTable SetData(DataTable dt)
         {
             using (SQLiteConnection connection = new SQLiteConnection(ConnectString))
@@ -152,10 +214,9 @@ namespace DateCalculator.db
         }
 
         /// <summary>
-        /// SQLの実行
+        /// SQLの実行（任意のSQL）
         /// </summary>
-        /// <param name="connectString"></param>
-        /// <param name="sqls"></param>
+        /// <param name="sqls">実行したいSQL</param>
         private void ExecuteNoneQuery(string[] sqls)
         {
             using (SQLiteConnection connection = new SQLiteConnection(ConnectString))
@@ -187,9 +248,8 @@ namespace DateCalculator.db
         /// <summary>
         /// スカラーによる単一データの取得
         /// </summary>
-        /// <param name="connectString"></param>
-        /// <param name="sql"></param>
-        /// <returns></returns>
+        /// <param name="sql">実行したいSQL</param>
+        /// <returns>SQLの実行結果（単一オブジェクト）</returns>
         private object ExecuteScalar(string sql)
         {
             object result = null;
@@ -210,9 +270,8 @@ namespace DateCalculator.db
         /// <summary>
         /// DataReaderを使ったデータの取得
         /// </summary>
-        /// <param name="connectString"></param>
-        /// <param name="sql"></param>
-        /// <returns></returns>
+        /// <param name="sql">実行したいSQL</param>
+        /// <returns>SQLの実行結果（複数オブジェクト）</returns>
         private List<object[]> ExecuteReader(string sql)
         {
             List<object[]> result = new List<object[]>();

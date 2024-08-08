@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DateCalculator", "DateCalcu
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ソリューション項目", "ソリューション項目", "{FC9A870F-F3D4-4FCF-9BD6-0C80E1216648}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{F112B161-D466-4FD6-A1F5-7006A80539F7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +19,8 @@ Global
 		{CD0C3CD3-C884-4A37-993C-A4578663250F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD0C3CD3-C884-4A37-993C-A4578663250F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD0C3CD3-C884-4A37-993C-A4578663250F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F112B161-D466-4FD6-A1F5-7006A80539F7}.Debug|Any CPU.ActiveCfg = Debug
+		{F112B161-D466-4FD6-A1F5-7006A80539F7}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
