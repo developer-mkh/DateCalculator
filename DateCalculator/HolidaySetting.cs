@@ -1,5 +1,5 @@
-﻿using DateCalculator.db;
-using DateCalculator.entity;
+﻿using DateCalculator.Db;
+using DateCalculator.Entity;
 using System;
 using System.Collections.Generic;
 using System.Data;

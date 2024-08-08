@@ -1,5 +1,6 @@
-﻿using DateCalculator.db;
-using DateCalculator.entity;
+﻿using DateCalculator.Db;
+using DateCalculator.Entity;
+using DateCalculator.Service;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -8,15 +9,6 @@ namespace DateCalculator
 {
     public partial class MainForm : Form
     {
-        /// <summary>
-        /// 休日カテゴリ：祝祭日
-        /// </summary>
-        private const int HOLIDAY = 1;
-        /// <summary>
-        /// 休日カテゴリ：その他休日
-        /// </summary>
-        private const int PAID_HOLIDAY = 2;
-
         public MainForm()
         {
             InitializeComponent();
@@ -34,40 +26,13 @@ namespace DateCalculator
             DateTime startDate = startDatePicker.Value.Date;
             DateTime endDate = endDatePicker.Value.Date;
 
-            int days = endDate.Subtract(startDate).Days + 1;
-
-            int businessDays = 1 + (days * 5 - (startDate.DayOfWeek - endDate.DayOfWeek) * 2) / 7;
-            if (endDate.DayOfWeek == DayOfWeek.Saturday)
-            {
-                businessDays--;
-            }
-            if (startDate.DayOfWeek == DayOfWeek.Sunday)
-            {
-                businessDays--;
-            }
-
             DBAccess dBAccess = new DBAccess();
+            CalcService service = new CalcService(dBAccess);
 
-            List<Holiday> holidays = dBAccess.GetHolidays(HOLIDAY);
-            List<Holiday> paidHolidays = dBAccess.GetHolidays(PAID_HOLIDAY);
-
-            for (int i = holidays.Count - 1; i >= 0; i--)
-            {
-                if (!IsWorkDay(holidays[i].date, startDate, endDate))
-                {
-                    holidays.RemoveAt(i);
-                }
-            }
-            for (int i = paidHolidays.Count - 1; i >= 0; i--)
-            {
-                if (!IsWorkDay(paidHolidays[i].date, startDate, endDate))
-                {
-                    paidHolidays.RemoveAt(i);
-                }
-            }
-
-            int businessDaysWithHolidays = businessDays - holidays.Count;
-            int businessDaysWithPaidHolidays = businessDaysWithHolidays - paidHolidays.Count;
+            int days = service.CalcDays(startDate, endDate);
+            int businessDays = service.CalcBusinessDays(startDate, endDate, days);
+            int businessDaysWithHolidays = service.CalcBusinessDaysWithHolidays(startDate, endDate, businessDays);
+            int businessDaysWithPaidHolidays = service.CalcBusinessDaysWithPaidHolidays(startDate, endDate, businessDaysWithHolidays);
 
             daysText.Text = days.ToString();
             businessDaysText.Text = businessDays.ToString();
@@ -83,19 +48,6 @@ namespace DateCalculator
         private void 終了ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
-        }
-
-        /// <summary>
-        /// 与えられた日が、与えられた期間内の平日かどうかを判定する。
-        /// 期間の両端は期間内に含む。
-        /// </summary>
-        /// <param name="target">判定したい日</param>
-        /// <param name="startDate">期間の開始日</param>
-        /// <param name="endDate">期間の終了日</param>
-        /// <returns>判定したい日が期間内の平日であればTrue</returns>
-        private bool IsWorkDay(DateTime target, DateTime startDate, DateTime endDate)
-        {
-            return (startDate <= target && target <= endDate && target.DayOfWeek != DayOfWeek.Saturday && target.DayOfWeek != DayOfWeek.Sunday);
         }
     }
 }

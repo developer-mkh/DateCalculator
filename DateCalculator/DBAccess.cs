@@ -1,4 +1,4 @@
-﻿using DateCalculator.entity;
+﻿using DateCalculator.Entity;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -7,7 +7,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 
-namespace DateCalculator.db
+namespace DateCalculator.Db
 {
     /// <summary>
     /// DAOクラス
@@ -36,7 +36,8 @@ namespace DateCalculator.db
         }
 
         /// <summary>
-        /// DB初期化処理：テーブル作成
+        /// DB初期化処理
+        /// テーブル作成しカテゴリーデータを投入する
         /// </summary>
         public void CreateTable()
         {
@@ -44,14 +45,14 @@ namespace DateCalculator.db
             sqls[0] = "CREATE TABLE IF NOT EXISTS holidays (id INTEGER PRIMARY KEY, date TEXT, name TEXT, category INTEGER)";
             sqls[1] = "CREATE TABLE IF NOT EXISTS categories (id INTEGER PRIMARY KEY, name TEXT, value INTEGER)";
             ExecuteNoneQuery(sqls);
-            initializeData(ConnectString);
+            InitializeData(ConnectString);
         }
 
         /// <summary>
         /// DB初期化処理：データ投入
         /// </summary>
         /// <param name="connectionString">接続文字列</param>
-        private void initializeData(string connectionString)
+        private void InitializeData(string connectionString)
         {
             if(int.Parse(ExecuteScalar("SELECT count(*) FROM categories").ToString()) == 0)
             {
