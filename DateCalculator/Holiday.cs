@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DateCalculator.entity
+namespace DateCalculator.Entity
 {
     /// <summary>
     /// Holidayテーブルに対するエンティティクラス

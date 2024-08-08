@@ -86,6 +86,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CalcService.cs" />
     <Compile Include="DBAccess.cs" />
     <Compile Include="Holiday.cs" />
     <Compile Include="HolidaySetting.cs">
